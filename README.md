@@ -1,10 +1,15 @@
-# OpenGG.Clean.Player-client
-
-## Intro
+# Intro
 
 [OpenGG.Clean.Player][] 通过修改 Flash 文件, 改变程序逻辑, 从而移除 Flash 程序内部的广告和跟踪功能.
 
 [OpenGG.Clean.Player-client][] 提供了一套 Flash 自动 patch 工具.
+
+# Usage
+
+0. Clone repo
+0. 运行 init.py
+
+# 相关知识
 
 ## Flash 程序修改流程
 
