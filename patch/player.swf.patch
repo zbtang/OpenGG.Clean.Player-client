@@ -1,0 +1,647 @@
+diff -u -r ./com/youku/data/PlayerConstant.class.asasm ..\player\player-0/com/youku/data/PlayerConstant.class.asasm
+--- ./com/youku/data/PlayerConstant.class.asasm	2012-11-23 13:28:10.928979400 +0800
++++ ..\player\player-0/com/youku/data/PlayerConstant.class.asasm	2012-11-23 13:05:57.293009500 +0800
+@@ -96,9 +96,22 @@
+     initproperty        QName(PackageNamespace(""), "SPECIAL_TYPE_SHENHE")
+ 
+     findproperty        QName(PackageNamespace(""), "PLAYLIST_NORMAL_SITE")
+-    pushstring          "v.youku.com"
++    ; pushstring          "v.youku.com"
++    pushstring          "v.opengg.me"
+     initproperty        QName(PackageNamespace(""), "PLAYLIST_NORMAL_SITE")
+ 
++    findproperty        QName(PackageNamespace(""), "HACK_AUTHOR")
++    pushstring          "OpenGG"
++    initproperty        QName(PackageNamespace(""), "HACK_AUTHOR")
++
++    findproperty        QName(PackageNamespace(""), "HACK_LINK")
++    pushstring          "http://opengg.me/781/opengg-clean-player/"
++    initproperty        QName(PackageNamespace(""), "HACK_LINK")
++
++    findproperty        QName(PackageNamespace(""), "HACK_PLAYER_PROXY")
++    pushstring          "player.opengg.me"
++    initproperty        QName(PackageNamespace(""), "HACK_PLAYER_PROXY")
++
+     findproperty        QName(PackageNamespace(""), "MANAGE_SITE")
+     pushstring          "manage.youku.com"
+     initproperty        QName(PackageNamespace(""), "MANAGE_SITE")
+@@ -138,10 +151,14 @@
+  trait const QName(PackageNamespace(""), "PANEL_CAPTION") slotid 13 type QName(PackageNamespace(""), "String") value Utf8("caption") end
+  trait const QName(PackageNamespace(""), "SPECIAL_TYPE_JIETU") slotid 14 type QName(PackageNamespace(""), "String") value Utf8("jietu") end
+  trait const QName(PackageNamespace(""), "SPECIAL_TYPE_SHENHE") slotid 15 type QName(PackageNamespace(""), "String") value Utf8("shenhe") end
+- trait const QName(PackageNamespace(""), "PLAYLIST_NORMAL_SITE") slotid 16 type QName(PackageNamespace(""), "String") value Utf8("v.youku.com") end
++ ; trait const QName(PackageNamespace(""), "PLAYLIST_NORMAL_SITE") slotid 16 type QName(PackageNamespace(""), "String") value Utf8("v.youku.com") end
++ trait const QName(PackageNamespace(""), "PLAYLIST_NORMAL_SITE") slotid 16 type QName(PackageNamespace(""), "String") value Utf8("v.opengg.me") end
+  trait const QName(PackageNamespace(""), "MANAGE_SITE") slotid 17 type QName(PackageNamespace(""), "String") value Utf8("manage.youku.com") end
+  trait const QName(PackageNamespace(""), "FEEMANAGE_SITE") slotid 18 type QName(PackageNamespace(""), "String") value Utf8("feemanage.youku.com") end
+  trait const QName(PackageNamespace(""), "TAOBAO_SITE") slotid 19 type QName(PackageNamespace(""), "String") value Utf8("taobao.com") end
+  trait const QName(PackageNamespace(""), "YOUKU_HELP_LINK") slotid 20 type QName(PackageNamespace(""), "String") value Utf8("http://www.youku.com/service/feed/") end
+  trait const QName(PackageNamespace(""), "IKU_INSTALL_LINK") slotid 21 type QName(PackageNamespace(""), "String") value Utf8("http://c.youku.com/pc-client") end
++ trait const QName(PackageNamespace(""), "HACK_AUTHOR") slotid 22 type QName(PackageNamespace(""), "String") value Utf8("OpenGG") end
++ trait const QName(PackageNamespace(""), "HACK_LINK") slotid 23 type QName(PackageNamespace(""), "String") value Utf8("http://opengg.me/781/opengg-clean-player/") end
++ trait const QName(PackageNamespace(""), "HACK_PLAYER_PROXY") slotid 24 type QName(PackageNamespace(""), "String") value Utf8("player.opengg.me") end
+ end ; class
+diff -u -r ./com/youku/data/PlayerData.class.asasm ..\player\player-0/com/youku/data/PlayerData.class.asasm
+--- ./com/youku/data/PlayerData.class.asasm	2012-11-23 13:28:10.913380700 +0800
++++ ..\player\player-0/com/youku/data/PlayerData.class.asasm	2012-11-23 12:45:36.146453500 +0800
+@@ -2157,7 +2157,8 @@
+       setlocal1
+ 
+ L73:
+-      getlocal1
++      ; getlocal1
++      getlocal2
+       returnvalue
+      end ; code
+     end ; body
+@@ -2184,7 +2185,13 @@
+       coerce_s
+       setlocal3
+ 
+-      pushstring          "http://v.youku.com/player/getRelatedPlayList?"
++      ; pushstring          "http://v.youku.com/player/getRelatedPlayList?"
++      pushstring          "http://"
++      getlex              QName(PackageNamespace("com.youku.data"), "PlayerConstant")
++      getproperty         QName(PackageNamespace(""), "PLAYLIST_NORMAL_SITE")
++      add
++      pushstring          "/player/getRelatedPlayList?"
++      add
+       setlocal1
+ 
+       getlocal1
+diff -u -r ./com/youku/PlayerShell.class.asasm ..\player\player-0/com/youku/PlayerShell.class.asasm
+--- ./com/youku/PlayerShell.class.asasm	2012-11-23 13:28:10.710577200 +0800
++++ ..\player\player-0/com/youku/PlayerShell.class.asasm	2012-11-23 12:42:59.011304900 +0800
+@@ -463,7 +463,13 @@
+       pushscope
+ 
+       findpropstrict      QName(PackageNamespace("flash.ui"), "ContextMenuItem")
+-      pushstring          "version: "
++      ; pushstring          "version: "
++      pushstring          "Hacked by "
++      getlex              QName(PackageNamespace("com.youku.data"), "PlayerConstant")
++      getproperty         QName(PackageNamespace(""), "HACK_AUTHOR")
++      add
++      pushstring          " version: "
++      add
+       pushstring          "4.1."
+       add
+       getlex              QName(PackageNamespace("com.youku"), "VersionInfo")
+@@ -473,6 +479,13 @@
+       coerce              QName(PackageNamespace("flash.ui"), "ContextMenuItem")
+       setlocal1
+ 
++      getlocal1
++      getlex              QName(PackageNamespace("flash.events"), "ContextMenuEvent")
++      getproperty         QName(PackageNamespace(""), "MENU_ITEM_SELECT")
++      getlocal0
++      getproperty         QName(PrivateNamespace(null, "com.youku:PlayerShell"), "onVersionItemSelect")
++      callpropvoid        QName(PackageNamespace(""), "addEventListener"), 2
++
+       findpropstrict      QName(PackageNamespace("flash.ui"), "ContextMenu")
+       constructprop       QName(PackageNamespace("flash.ui"), "ContextMenu"), 0
+       coerce              QName(PackageNamespace("flash.ui"), "ContextMenu")
+@@ -495,6 +508,29 @@
+     end ; body
+    end ; method
+   end ; trait
++  trait method QName(PrivateNamespace(null, "com.youku:PlayerShell"), "onVersionItemSelect")
++   method
++    refid "com.youku:PlayerShell/onVersionItemSelect"
++    param QName(PackageNamespace("flash.events"), "ContextMenuEvent")
++    returns QName(PackageNamespace(""), "void")
++    body
++     maxstack 2
++     localcount 2
++     initscopedepth 4
++     maxscopedepth 5
++     code
++      getlocal0
++      pushscope
++
++      getlex              QName(PackageNamespace("com.youku.utils"), "OpenWindow")
++      getlex              QName(PackageNamespace("com.youku.data"), "PlayerConstant")
++      getproperty         QName(PackageNamespace(""), "HACK_LINK")
++      callpropvoid        QName(PackageNamespace(""), "openURL"), 1
++      returnvoid
++     end ; code
++    end ; body
++   end ; method
++  end ; trait
+   trait method QName(ProtectedNamespace("com.youku:PlayerShell"), "onContextMenuUpdated")
+    method
+     refid "com.youku:PlayerShell:onContextMenuUpdated"
+diff -u -r ./com/youku/plugins/ads/model/ADProxy.class.asasm ..\player\player-0/com/youku/plugins/ads/model/ADProxy.class.asasm
+--- ./com/youku/plugins/ads/model/ADProxy.class.asasm	2012-11-23 13:28:11.381386200 +0800
++++ ..\player\player-0/com/youku/plugins/ads/model/ADProxy.class.asasm	2012-11-23 11:58:55.032115000 +0800
+@@ -47,6 +47,7 @@
+      initscopedepth 4
+      maxscopedepth 5
+      code
++      returnvoid
+       getlocal0
+       pushscope
+ 
+diff -u -r ./com/youku/plugins/ads/model/FrontProxy.class.asasm ..\player\player-0/com/youku/plugins/ads/model/FrontProxy.class.asasm
+--- ./com/youku/plugins/ads/model/FrontProxy.class.asasm	2012-11-23 13:28:11.443784600 +0800
++++ ..\player\player-0/com/youku/plugins/ads/model/FrontProxy.class.asasm	2012-11-23 11:59:18.477268100 +0800
+@@ -320,7 +320,8 @@
+       findpropstrict      QName(PackageNamespace("flash.utils"), "setTimeout")
+       getlocal0
+       getproperty         QName(PrivateNamespace(null, "com.youku.plugins.ads.model:FrontProxy#0"), "loadDataTimeOut")
+-      pushshort           8000
++      ; pushshort           8000
++      pushshort           0
+       callproperty        QName(PackageNamespace("flash.utils"), "setTimeout"), 2
+       dup
+       setlocal            10
+diff -u -r ./com/youku/plugins/ads/view/FrontMediator.class.asasm ..\player\player-0/com/youku/plugins/ads/view/FrontMediator.class.asasm
+--- ./com/youku/plugins/ads/view/FrontMediator.class.asasm	2012-11-23 13:28:11.443784600 +0800
++++ ..\player\player-0/com/youku/plugins/ads/view/FrontMediator.class.asasm	2012-11-23 12:00:23.716260700 +0800
+@@ -3100,8 +3100,8 @@
+       getproperty         QName(PrivateNamespace(null, "com.youku.plugins.ads.view:FrontMediator#0"), "_playerProxy")
+       getproperty         QName(Namespace("com.youku.interfaces:IPlayerProxy"), "playerData")
+       getproperty         QName(Namespace("com.youku.interfaces:IPlayerData"), "videoTotalTime")
+-      pushbyte            60
+-      ifnlt               L40
++      pushbyte            0
++      ifnge               L40
+ 
+       pushbyte            0
+       convert_d
+diff -u -r ./com/youku/plugins/endcard/view/OneKeyShare.class.asasm ..\player\player-0/com/youku/plugins/endcard/view/OneKeyShare.class.asasm
+--- ./com/youku/plugins/endcard/view/OneKeyShare.class.asasm	2012-11-23 13:28:13.830610100 +0800
++++ ..\player\player-0/com/youku/plugins/endcard/view/OneKeyShare.class.asasm	2012-11-23 13:04:23.747651600 +0800
+@@ -132,7 +132,13 @@
+       coerce_s
+       setlocal            7
+ 
+-      pushstring          "http://player.youku.com/player.php/sid/"
++      ; pushstring          "http://player.youku.com/player.php/sid/"
++      pushstring          "http://"
++      getlex              QName(PackageNamespace("com.youku.data"), "PlayerConstant")
++      getproperty         QName(PackageNamespace(""), "HACK_PLAYER_PROXY")
++      add
++      pushstring          "/player.php/sid/"
++      add
+       getlocal0
+       getproperty         QName(PrivateNamespace(null, "com.youku.plugins.endcard.view:OneKeyShare#0"), "_data")
+       getproperty         QName(Namespace("com.youku.interfaces:IPlayerData"), "videoIdEncode")
+diff -u -r ./com/youku/plugins/menu/view/ContextMenuMediator.class.asasm ..\player\player-0/com/youku/plugins/menu/view/ContextMenuMediator.class.asasm
+--- ./com/youku/plugins/menu/view/ContextMenuMediator.class.asasm	2012-11-23 13:28:13.097402200 +0800
++++ ..\player\player-0/com/youku/plugins/menu/view/ContextMenuMediator.class.asasm	2012-11-23 12:43:20.612034300 +0800
+@@ -167,7 +167,13 @@
+ 
+       getlocal0
+       findpropstrict      QName(PackageNamespace("flash.ui"), "ContextMenuItem")
+-      pushstring          "version: "
++      ; pushstring          "version: "
++      pushstring          "Hacked by "
++      getlex              QName(PackageNamespace("com.youku.data"), "PlayerConstant")
++      getproperty         QName(PackageNamespace(""), "HACK_AUTHOR")
++      add
++      pushstring          " version: "
++      add
+       pushstring          "4.1."
+       add
+       getlex              QName(PackageNamespace("com.youku"), "VersionInfo")
+@@ -177,6 +183,14 @@
+       initproperty        QName(PrivateNamespace(null, "com.youku.plugins.menu.view:ContextMenuMediator"), "_versionItem")
+ 
+       getlocal0
++      getproperty         QName(PrivateNamespace(null, "com.youku.plugins.menu.view:ContextMenuMediator"), "_versionItem")
++      getlex              QName(PackageNamespace("flash.events"), "ContextMenuEvent")
++      getproperty         QName(PackageNamespace(""), "MENU_ITEM_SELECT")
++      getlocal0
++      getproperty         QName(PrivateNamespace(null, "com.youku.plugins.menu.view:ContextMenuMediator"), "onVersionItemSelect")
++      callpropvoid        QName(PackageNamespace(""), "addEventListener"), 2
++
++      getlocal0
+       getproperty         QName(PrivateNamespace(null, "com.youku.plugins.menu.view:ContextMenuMediator"), "_contextMenu")
+       getproperty         QName(PackageNamespace(""), "customItems")
+       getlocal0
+@@ -314,6 +328,29 @@
+     end ; body
+    end ; method
+   end ; trait
++  trait method QName(PrivateNamespace(null, "com.youku.plugins.menu.view:ContextMenuMediator"), "onVersionItemSelect")
++   method
++    refid "com.youku.plugins.menu.view:ContextMenuMediator/onVersionItemSelect"
++    param QName(PackageNamespace("flash.events"), "ContextMenuEvent")
++    returns QName(PackageNamespace(""), "void")
++    body
++     maxstack 2
++     localcount 2
++     initscopedepth 4
++     maxscopedepth 5
++     code
++      getlocal0
++      pushscope
++
++      getlex              QName(PackageNamespace("com.youku.utils"), "OpenWindow")
++      getlex              QName(PackageNamespace("com.youku.data"), "PlayerConstant")
++      getproperty         QName(PackageNamespace(""), "HACK_LINK")
++      callpropvoid        QName(PackageNamespace(""), "openURL"), 1
++      returnvoid
++     end ; code
++    end ; body
++   end ; method
++  end ; trait
+   trait method QName(PrivateNamespace(null, "com.youku.plugins.menu.view:ContextMenuMediator"), "onVideoInfoItemSelect")
+    method
+     refid "com.youku.plugins.menu.view:ContextMenuMediator/onVideoInfoItemSelect"
+diff -u -r ./com/youku/plugins/report/ReportFacade.class.asasm ..\player\player-0/com/youku/plugins/report/ReportFacade.class.asasm
+--- ./com/youku/plugins/report/ReportFacade.class.asasm	2012-11-23 13:28:11.615387100 +0800
++++ ..\player\player-0/com/youku/plugins/report/ReportFacade.class.asasm	2012-11-23 12:03:18.146862200 +0800
+@@ -38,6 +38,7 @@
+      initscopedepth 4
+      maxscopedepth 5
+      code
++      returnvoid
+       getlocal0
+       pushscope
+ 
+diff -u -r ./com/youku/plugins/searchBar/view/SearchBarMediator.class.asasm ..\player\player-0/com/youku/plugins/searchBar/view/SearchBarMediator.class.asasm
+--- ./com/youku/plugins/searchBar/view/SearchBarMediator.class.asasm	2012-11-23 13:28:12.223794200 +0800
++++ ..\player\player-0/com/youku/plugins/searchBar/view/SearchBarMediator.class.asasm	2012-11-23 13:03:39.763780500 +0800
+@@ -626,7 +626,13 @@
+       coerce_s
+       setlocal            6
+ 
+-      pushstring          "http://player.youku.com/player.php/sid/"
++      ; pushstring          "http://player.youku.com/player.php/sid/"
++      pushstring          "http://"
++      getlex              QName(PackageNamespace("com.youku.data"), "PlayerConstant")
++      getproperty         QName(PackageNamespace(""), "HACK_PLAYER_PROXY")
++      add
++      pushstring          "/player.php/sid/"
++      add
+       getlocal0
+       getproperty         QName(PrivateNamespace(null, "com.youku.plugins.searchBar.view:SearchBarMediator#0"), "_playerProxy")
+       getproperty         QName(Namespace("com.youku.interfaces:IPlayerProxy"), "playerData")
+@@ -686,17 +692,21 @@
+ 
+ L73:
+       label
+-      getlocal3
+-      findpropstrict      QName(PackageNamespace(""), "encodeURIComponent")
++      ; getlocal3
++      ; findpropstrict      QName(PackageNamespace(""), "encodeURIComponent")
+       pushstring          "http://share.renren.com/share/buttonshare.do?link="
++      findpropstrict      QName(PackageNamespace(""), "encodeURIComponent")
+       getlocal            4
++      callproperty        QName(PackageNamespace(""), "encodeURIComponent"), 1
+       add
+       pushstring          "&title="
+       add
++      findpropstrict      QName(PackageNamespace(""), "encodeURIComponent")
+       getlocal            5
+-      add
+       callproperty        QName(PackageNamespace(""), "encodeURIComponent"), 1
+       add
++      ; callproperty        QName(PackageNamespace(""), "encodeURIComponent"), 1
++      ; add
+       coerce_s
+       setlocal2
+ 
+@@ -716,21 +726,27 @@
+ 
+ L98:
+       label
+-      getlocal3
+-      findpropstrict      QName(PackageNamespace(""), "encodeURIComponent")
++      ; getlocal3
++      ; findpropstrict      QName(PackageNamespace(""), "encodeURIComponent")
+       pushstring          "http://v.t.sina.com.cn/share/share.php?appkey=2684493555&url="
++      findpropstrict      QName(PackageNamespace(""), "encodeURIComponent")
+       getlocal            4
++      callproperty        QName(PackageNamespace(""), "encodeURIComponent"), 1
+       add
+       pushstring          "&ralateUid=1642904381&title="
+       add
++      findpropstrict      QName(PackageNamespace(""), "encodeURIComponent")
+       getlocal            5
++      callproperty        QName(PackageNamespace(""), "encodeURIComponent"), 1
+       add
+       pushstring          "&pic="
+       add
++      findpropstrict      QName(PackageNamespace(""), "encodeURIComponent")
+       getlocal            6
+-      add
+       callproperty        QName(PackageNamespace(""), "encodeURIComponent"), 1
+       add
++      ; callproperty        QName(PackageNamespace(""), "encodeURIComponent"), 1
++      ; add
+       coerce_s
+       setlocal2
+ 
+@@ -750,13 +766,15 @@
+ 
+ L127:
+       label
+-      getlocal3
+-      findpropstrict      QName(PackageNamespace(""), "encodeURIComponent")
++      ; getlocal3
++      ; findpropstrict      QName(PackageNamespace(""), "encodeURIComponent")
+       pushstring          "http://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url="
++      findpropstrict      QName(PackageNamespace(""), "encodeURIComponent")
+       getlocal            4
+-      add
+       callproperty        QName(PackageNamespace(""), "encodeURIComponent"), 1
+       add
++      ; callproperty        QName(PackageNamespace(""), "encodeURIComponent"), 1
++      ; add
+       coerce_s
+       setlocal2
+ 
+@@ -776,21 +794,25 @@
+ 
+ L148:
+       label
+-      getlocal3
+-      findpropstrict      QName(PackageNamespace(""), "encodeURIComponent")
++      ; getlocal3
++      ; findpropstrict      QName(PackageNamespace(""), "encodeURIComponent")
+       pushstring          "http://v.t.qq.com/share/share.php?title="
+-      findpropstrict      QName(PackageNamespace(""), "encodeURI")
++      ; findpropstrict      QName(PackageNamespace(""), "encodeURI")
++      findpropstrict      QName(PackageNamespace(""), "encodeURIComponent")
+       getlocal            5
+-      callproperty        QName(PackageNamespace(""), "encodeURI"), 1
++      ; callproperty        QName(PackageNamespace(""), "encodeURI"), 1
++      callproperty        QName(PackageNamespace(""), "encodeURIComponent"), 1
+       add
+       pushstring          "&url="
+       add
++      findpropstrict      QName(PackageNamespace(""), "encodeURIComponent")
+       getlocal            4
++      callproperty        QName(PackageNamespace(""), "encodeURIComponent"), 1
+       add
+       pushstring          "&appkey=e7ad0b0199994bda85ecc0a44ce9915f&site=www.youku.com&assname=youku2010"
+       add
+-      callproperty        QName(PackageNamespace(""), "encodeURIComponent"), 1
+-      add
++      ; callproperty        QName(PackageNamespace(""), "encodeURIComponent"), 1
++      ; add
+       coerce_s
+       setlocal2
+ 
+diff -u -r ./com/youku/plugins/share/view/components/IconList.class.asasm ..\player\player-0/com/youku/plugins/share/view/components/IconList.class.asasm
+--- ./com/youku/plugins/share/view/components/IconList.class.asasm	2012-11-23 13:28:13.752608900 +0800
++++ ..\player\player-0/com/youku/plugins/share/view/components/IconList.class.asasm	2012-11-23 13:25:31.504102100 +0800
+@@ -117,7 +117,13 @@
+       coerce_s
+       setlocal            4
+ 
+-      pushstring          "http://player.youku.com/player.php/sid/"
++      ; pushstring          "http://player.youku.com/player.php/sid/"
++      pushstring          "http://"
++      getlex              QName(PackageNamespace("com.youku.data"), "PlayerConstant")
++      getproperty         QName(PackageNamespace(""), "HACK_PLAYER_PROXY")
++      add
++      pushstring          "/player.php/sid/"
++      add
+       getlocal0
+       getproperty         QName(PrivateNamespace(null, "com.youku.plugins.share.view.components:IconList#0"), "_playerProxy")
+       getproperty         QName(Namespace("com.youku.interfaces:IPlayerProxy"), "playerData")
+@@ -136,13 +142,15 @@
+       pushstring          "sharePanel_icon_qq"
+       callproperty        QName(PackageNamespace(""), "getAsset"), 1
+       pushstring          "url"
+-      getlocal1
+-      findpropstrict      QName(PackageNamespace(""), "encodeURIComponent")
++      ; getlocal1
++      ; findpropstrict      QName(PackageNamespace(""), "encodeURIComponent")
+       pushstring          "http://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url="
++      findpropstrict      QName(PackageNamespace(""), "encodeURIComponent")
+       getlocal2
+-      add
+       callproperty        QName(PackageNamespace(""), "encodeURIComponent"), 1
+       add
++      ; callproperty        QName(PackageNamespace(""), "encodeURIComponent"), 1
++      ; add
+       newobject           3
+       callpropvoid        QName(Namespace("http://adobe.com/AS3/2006/builtin"), "push"), 1
+ 
+@@ -155,10 +163,12 @@
+       pushstring          "sharePanel_icon_renren"
+       callproperty        QName(PackageNamespace(""), "getAsset"), 1
+       pushstring          "url"
+-      getlocal1
+-      findpropstrict      QName(PackageNamespace(""), "encodeURIComponent")
++      ; getlocal1
++      ; findpropstrict      QName(PackageNamespace(""), "encodeURIComponent")
+       pushstring          "http://share.renren.com/share/buttonshare.do?link="
++      findpropstrict      QName(PackageNamespace(""), "encodeURIComponent")
+       getlocal2
++      callproperty        QName(PackageNamespace(""), "encodeURIComponent"), 1
+       add
+       pushstring          "&title="
+       add
+@@ -166,8 +176,8 @@
+       getlocal3
+       callproperty        QName(PackageNamespace(""), "encodeURIComponent"), 1
+       add
+-      callproperty        QName(PackageNamespace(""), "encodeURIComponent"), 1
+-      add
++      ; callproperty        QName(PackageNamespace(""), "encodeURIComponent"), 1
++      ; add
+       newobject           3
+       callpropvoid        QName(Namespace("http://adobe.com/AS3/2006/builtin"), "push"), 1
+ 
+@@ -180,10 +190,12 @@
+       pushstring          "sharePanel_icon_sina"
+       callproperty        QName(PackageNamespace(""), "getAsset"), 1
+       pushstring          "url"
+-      getlocal1
+-      findpropstrict      QName(PackageNamespace(""), "encodeURIComponent")
++      ; getlocal1
++      ; findpropstrict      QName(PackageNamespace(""), "encodeURIComponent")
+       pushstring          "http://v.t.sina.com.cn/share/share.php?appkey=2684493555&url="
++      findpropstrict      QName(PackageNamespace(""), "encodeURIComponent")
+       getlocal2
++      callproperty        QName(PackageNamespace(""), "encodeURIComponent"), 1
+       add
+       pushstring          "&ralateUid=1642904381&title="
+       add
+@@ -191,8 +203,8 @@
+       getlocal3
+       callproperty        QName(PackageNamespace(""), "encodeURIComponent"), 1
+       add
+-      callproperty        QName(PackageNamespace(""), "encodeURIComponent"), 1
+-      add
++      ; callproperty        QName(PackageNamespace(""), "encodeURIComponent"), 1
++      ; add
+       newobject           3
+       callpropvoid        QName(Namespace("http://adobe.com/AS3/2006/builtin"), "push"), 1
+ 
+@@ -205,22 +217,28 @@
+       pushstring          "sharePanel_icon_kaixin"
+       callproperty        QName(PackageNamespace(""), "getAsset"), 1
+       pushstring          "url"
+-      getlocal1
++      ; getlocal1
+       pushstring          "http://www.kaixin001.com/repaste/share.php?rurl="
+-      add
++      ; add
++      findpropstrict      QName(PackageNamespace(""), "encodeURIComponent")
+       getlocal2
++      callproperty        QName(PackageNamespace(""), "encodeURIComponent"), 1
+       add
+       pushstring          "&rcontent="
+       add
++      findpropstrict      QName(PackageNamespace(""), "encodeURIComponent")
+       getlocal2
++      callproperty        QName(PackageNamespace(""), "encodeURIComponent"), 1
+       add
+       pushstring          "&rtitle="
+       add
+-      findpropstrict      QName(PackageNamespace(""), "encodeURI")
+-      getlocal0
++      ; findpropstrict      QName(PackageNamespace(""), "encodeURI")
++      ; getlocal0
++      findpropstrict      QName(PackageNamespace(""), "encodeURIComponent")
+       getlocal3
+-      callproperty        QName(PrivateNamespace(null, "com.youku.plugins.share.view.components:IconList#0"), "gbkEncode"), 1
+-      callproperty        QName(PackageNamespace(""), "encodeURI"), 1
++      ; callproperty        QName(PrivateNamespace(null, "com.youku.plugins.share.view.components:IconList#0"), "gbkEncode"), 1
++      ; callproperty        QName(PackageNamespace(""), "encodeURI"), 1
++      callproperty        QName(PackageNamespace(""), "encodeURIComponent"), 1
+       add
+       newobject           3
+       callpropvoid        QName(Namespace("http://adobe.com/AS3/2006/builtin"), "push"), 1
+@@ -234,22 +252,26 @@
+       pushstring          "sharePanel_icon_tianya"
+       callproperty        QName(PackageNamespace(""), "getAsset"), 1
+       pushstring          "url"
+-      getlocal1
++      ; getlocal1
+       pushstring          "http://www.tianya.cn/new/share/compose.asp?itemtype=tech&item=665&strTitle="
+-      add
+-      findpropstrict      QName(PackageNamespace(""), "encodeURI")
++      ; add
++      ; findpropstrict      QName(PackageNamespace(""), "encodeURI")
+       getlocal0
+       getlocal3
+       callproperty        QName(PrivateNamespace(null, "com.youku.plugins.share.view.components:IconList#0"), "gbkEncode"), 1
+-      callproperty        QName(PackageNamespace(""), "encodeURI"), 1
++      ; callproperty        QName(PackageNamespace(""), "encodeURI"), 1
+       add
+       pushstring          "&strFlashURL="
+       add
++      findpropstrict      QName(PackageNamespace(""), "encodeURIComponent")
+       getlocal            5
++      callproperty        QName(PackageNamespace(""), "encodeURIComponent"), 1
+       add
+       pushstring          "&strFlashPageURL="
+       add
++      findpropstrict      QName(PackageNamespace(""), "encodeURIComponent")
+       getlocal2
++      callproperty        QName(PackageNamespace(""), "encodeURIComponent"), 1
+       add
+       newobject           3
+       callpropvoid        QName(Namespace("http://adobe.com/AS3/2006/builtin"), "push"), 1
+@@ -263,21 +285,25 @@
+       pushstring          "sharePanel_icon_tengxunweibo"
+       callproperty        QName(PackageNamespace(""), "getAsset"), 1
+       pushstring          "url"
+-      getlocal1
+-      findpropstrict      QName(PackageNamespace(""), "encodeURIComponent")
++      ; getlocal1
++      ; findpropstrict      QName(PackageNamespace(""), "encodeURIComponent")
+       pushstring          "http://v.t.qq.com/share/share.php?title="
+-      findpropstrict      QName(PackageNamespace(""), "encodeURI")
++      ; findpropstrict      QName(PackageNamespace(""), "encodeURI")
++      findpropstrict      QName(PackageNamespace(""), "encodeURIComponent")
+       getlocal3
+-      callproperty        QName(PackageNamespace(""), "encodeURI"), 1
++      ; callproperty        QName(PackageNamespace(""), "encodeURI"), 1
++      callproperty        QName(PackageNamespace(""), "encodeURIComponent"), 1
+       add
+       pushstring          "&url="
+       add
++      findpropstrict      QName(PackageNamespace(""), "encodeURIComponent")
+       getlocal2
++      callproperty        QName(PackageNamespace(""), "encodeURIComponent"), 1
+       add
+       pushstring          "&appkey=e7ad0b0199994bda85ecc0a44ce9915f&site=www.youku.com&assname=youku2010"
+       add
+-      callproperty        QName(PackageNamespace(""), "encodeURIComponent"), 1
+-      add
++      ; callproperty        QName(PackageNamespace(""), "encodeURIComponent"), 1
++      ; add
+       newobject           3
+       callpropvoid        QName(Namespace("http://adobe.com/AS3/2006/builtin"), "push"), 1
+ 
+diff -u -r ./com/youku/plugins/share/view/components/SharePanel.class.asasm ..\player\player-0/com/youku/plugins/share/view/components/SharePanel.class.asasm
+--- ./com/youku/plugins/share/view/components/SharePanel.class.asasm	2012-11-23 13:28:13.315806000 +0800
++++ ..\player\player-0/com/youku/plugins/share/view/components/SharePanel.class.asasm	2012-11-23 13:05:34.605935000 +0800
+@@ -502,7 +502,13 @@
+ 
+       getlocal0
+       getproperty         QName(PrivateNamespace(null, "com.youku.plugins.share.view.components:SharePanel"), "_input1")
+-      pushstring          "<embed src=\"http://player.youku.com/player.php/sid/"
++      ; pushstring          "<embed src=\"http://player.youku.com/player.php/sid/"
++      pushstring          "<embed src=\"http://"
++      getlex              QName(PackageNamespace("com.youku.data"), "PlayerConstant")
++      getproperty         QName(PackageNamespace(""), "HACK_PLAYER_PROXY")
++      add
++      pushstring          "/player.php/sid/"
++      add
+       getlocal0
+       getproperty         QName(PrivateNamespace(null, "com.youku.plugins.share.view.components:SharePanel"), "_playerProxy")
+       getproperty         QName(Namespace("com.youku.interfaces:IPlayerProxy"), "playerData")
+@@ -514,7 +520,13 @@
+ 
+       getlocal0
+       getproperty         QName(PrivateNamespace(null, "com.youku.plugins.share.view.components:SharePanel"), "_input2")
+-      pushstring          "http://player.youku.com/player.php/sid/"
++      ; pushstring          "http://player.youku.com/player.php/sid/"
++      pushstring          "http://"
++      getlex              QName(PackageNamespace("com.youku.data"), "PlayerConstant")
++      getproperty         QName(PackageNamespace(""), "HACK_PLAYER_PROXY")
++      add
++      pushstring          "/player.php/sid/"
++      add
+       getlocal0
+       getproperty         QName(PrivateNamespace(null, "com.youku.plugins.share.view.components:SharePanel"), "_playerProxy")
+       getproperty         QName(Namespace("com.youku.interfaces:IPlayerProxy"), "playerData")
+diff -u -r ./com/youku/RootDataParser.class.asasm ..\player\player-0/com/youku/RootDataParser.class.asasm
+--- ./com/youku/RootDataParser.class.asasm	2012-11-23 13:28:10.835378000 +0800
++++ ..\player\player-0/com/youku/RootDataParser.class.asasm	2012-11-23 13:11:15.543367700 +0800
+@@ -598,20 +598,24 @@
+      pushfalse
+      setproperty         QName(PackageNamespace(""), "showTHX")
+ 
+-     getlocal1
+-     pushstring          "THX"
+-     getproperty         MultinameL([PrivateNamespace(null, "com.youku:RootDataParser/parseData#0"), PrivateNamespace(null, "com.youku:RootDataParser/parseData#1"), PackageNamespace(""), PackageNamespace("com.youku"), PackageInternalNs("com.youku"), Namespace("http://adobe.com/AS3/2006/builtin"), ProtectedNamespace("com.youku:RootDataParser"), StaticProtectedNs("com.youku:RootDataParser")])
+-     pushnull
++     ; getlocal1
++     ; pushstring          "THX"
++     ; getproperty         MultinameL([PrivateNamespace(null, "com.youku:RootDataParser/parseData#0"), PrivateNamespace(null, "com.youku:RootDataParser/parseData#1"), PackageNamespace(""), PackageNamespace("com.youku"), PackageInternalNs("com.youku"), Namespace("http://adobe.com/AS3/2006/builtin"), ProtectedNamespace("com.youku:RootDataParser"), StaticProtectedNs("com.youku:RootDataParser")])
++     ; pushnull
++     pushtrue
++     pushfalse
+      ifeq                L450
+ 
+      getlocal2
+      pushtrue
+      setproperty         QName(PackageNamespace(""), "showTHX")
+ 
+-     getlocal1
+-     pushstring          "THX"
+-     getproperty         MultinameL([PrivateNamespace(null, "com.youku:RootDataParser/parseData#0"), PrivateNamespace(null, "com.youku:RootDataParser/parseData#1"), PackageNamespace(""), PackageNamespace("com.youku"), PackageInternalNs("com.youku"), Namespace("http://adobe.com/AS3/2006/builtin"), ProtectedNamespace("com.youku:RootDataParser"), StaticProtectedNs("com.youku:RootDataParser")])
+-     pushstring          "on"
++     ; getlocal1
++     ; pushstring          "THX"
++     ; getproperty         MultinameL([PrivateNamespace(null, "com.youku:RootDataParser/parseData#0"), PrivateNamespace(null, "com.youku:RootDataParser/parseData#1"), PackageNamespace(""), PackageNamespace("com.youku"), PackageInternalNs("com.youku"), Namespace("http://adobe.com/AS3/2006/builtin"), ProtectedNamespace("com.youku:RootDataParser"), StaticProtectedNs("com.youku:RootDataParser")])
++     ; pushstring          "on"
++     pushtrue
++     pushtrue
+      ifne                L437
+ 
+      getlocal2
+Only in ..\player\player-0: player-0.main.abc
+Only in ..\player\player-0: player-0.main.asasm
+Only in .: player1-0.main.asasm
