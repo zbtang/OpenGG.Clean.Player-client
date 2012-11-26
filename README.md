@@ -49,10 +49,13 @@
 
 [WinRABCDAsm][] 是 [RABCDAsm][] 的图形化前端, 极大地简化了 Flash assemble/disassemble 操作.
 
-
 ## [Flash Player Plugin content debugger][]
 
 Debug 版本的Flash Player, 有助于查看 Flash 文件输出的 Error/Warning/Info.
+
+## [Wamp][]
+
+Windows + Apache + Mysql + PHP, 用于搭建本地调试环境.
 
 ## [Notepad++][]
 
@@ -113,6 +116,7 @@ Debug 版本的Flash Player, 有助于查看 Flash 文件输出的 Error/Warning
 [CyberShadow]: http://blog.thecybershadow.net/
 [README for RABCDAsm]: https://github.com/CyberShadow/RABCDAsm/blob/master/README.md
 [WinRABCDAsm]: http://sourceforge.net/projects/winrabcdasm/
+[Wamp]:http://www.wampserver.com/
 [Notepad++]: http://notepad-plus-plus.org/
 [GnuWin32]: http://gnuwin32.sourceforge.net/
 [GetGnuWin32]: http://getgnuwin32.sourceforge.net/
